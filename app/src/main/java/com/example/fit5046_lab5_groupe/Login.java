@@ -40,14 +40,14 @@ public class Login extends AppCompatActivity {
         binding.signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Login.this, SignUp.class);
+                Intent intent = new Intent(Login.this, RegisterEntry.class);
                 signUpLauncher.launch(intent);
             }
         });
         binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Login.this, MainActivity.class);
+                Intent intent = new Intent(Login.this, LoginEntry.class);
                 startActivity(intent);
             }
         });
