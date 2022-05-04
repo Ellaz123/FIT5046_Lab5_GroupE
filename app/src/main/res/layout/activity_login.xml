@@ -36,7 +36,7 @@
         app:layout_constraintVertical_bias="0.148" />
 
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/passwordText"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -45,10 +45,10 @@
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress3" />
+        app:layout_constraintTop_toBottomOf="@+id/emailAddressText" />
 
     <EditText
-        android:id="@+id/editTextTextEmailAddress3"
+        android:id="@+id/emailAddressText"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="216dp"
@@ -75,7 +75,7 @@
         app:layout_constraintTop_toBottomOf="@+id/signUpBtn" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/WelcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
@@ -90,21 +90,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/emailIcon"
         android:layout_width="34dp"
         android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextEmailAddress3"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTextEmailAddress3"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextEmailAddress3"
+        app:layout_constraintBottom_toBottomOf="@+id/emailAddressText"
+        app:layout_constraintEnd_toStartOf="@+id/emailAddressText"
+        app:layout_constraintTop_toTopOf="@+id/emailAddressText"
         app:srcCompat="@mipmap/ic_email" />
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/passwordIcon"
         android:layout_width="34dp"
         android:layout_height="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPassword"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTextPassword"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPassword"
+        app:layout_constraintBottom_toBottomOf="@+id/passwordText"
+        app:layout_constraintEnd_toStartOf="@+id/passwordText"
+        app:layout_constraintTop_toTopOf="@+id/passwordText"
         app:srcCompat="@mipmap/ic_password" />
 
 

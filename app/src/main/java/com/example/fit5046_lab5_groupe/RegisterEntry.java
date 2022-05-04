@@ -16,6 +16,7 @@ public class RegisterEntry extends AppCompatActivity {
         binding = ActivityRegisterDataEntryBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
     }
 
 }
