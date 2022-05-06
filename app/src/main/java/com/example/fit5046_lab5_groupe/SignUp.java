@@ -28,6 +28,7 @@ public class SignUp extends AppCompatActivity {
         setContentView(view);
         auth = FirebaseAuth.getInstance();
         Button registerButton = binding.registerBtn;
+        Button backButton = binding.backBtn;
         EditText emailEditText= binding.EmailAddress;
         EditText passwordEditText= binding.password;
         EditText confirmPasswordEditText = binding.confirmPassword;
@@ -50,6 +51,12 @@ public class SignUp extends AppCompatActivity {
                 }
                 else
                     registerUser(email_txt, password_txt);
+            }
+        });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity( new Intent(SignUp.this, Login.class));
             }
         });
     }

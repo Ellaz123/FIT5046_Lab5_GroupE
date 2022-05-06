@@ -55,8 +55,11 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.4.0'
     implementation 'androidx.lifecycle:lifecycle-livedata:2.4.0'
 
+    implementation("com.google.android.gms:play-services-location:18.0.0")
     //MapBox
     implementation ('com.mapbox.maps:android:10.4.0'){
         exclude group: 'group_name', module: 'module_name'
     }
+
+
 }

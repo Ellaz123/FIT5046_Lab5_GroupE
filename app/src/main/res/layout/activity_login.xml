@@ -96,7 +96,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/emailAddressText"
         app:layout_constraintEnd_toStartOf="@+id/emailAddressText"
         app:layout_constraintTop_toTopOf="@+id/emailAddressText"
-        app:srcCompat="@mipmap/ic_email" />
+        app:srcCompat="@drawable/ic_email" />
 
     <ImageView
         android:id="@+id/passwordIcon"
@@ -105,7 +105,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/passwordText"
         app:layout_constraintEnd_toStartOf="@+id/passwordText"
         app:layout_constraintTop_toTopOf="@+id/passwordText"
-        app:srcCompat="@mipmap/ic_password" />
+        app:srcCompat="@drawable/ic_password" />
 
 
 
