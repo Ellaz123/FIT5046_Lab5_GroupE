@@ -52,7 +52,7 @@ public class DataEntryFragment extends Fragment {
         dateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               showDatePicker(view);
+                showDatePicker(view);
 
             }
         });
