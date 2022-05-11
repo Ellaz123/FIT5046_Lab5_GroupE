@@ -1,5 +1,7 @@
 package com.example.fit5046_lab5_groupe.fragment;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import com.example.fit5046_lab5_groupe.R;
 import androidx.fragment.app.Fragment;
 
 import com.example.fit5046_lab5_groupe.databinding.MapFragmentBinding;
+import com.google.android.gms.maps.model.LatLng;
 import com.mapbox.geojson.Point;
 import com.mapbox.maps.CameraOptions;
 import com.mapbox.maps.MapView;
@@ -31,7 +34,9 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotation;
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions;
 import com.mapbox.maps.plugin.delegates.MapPluginProviderDelegate;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.util.List;
 import java.util.Map;
 
 public class MapFragment extends Fragment {
@@ -49,7 +54,8 @@ public class MapFragment extends Fragment {
         mapBinding = MapFragmentBinding.inflate(inflater, container, false);
         View view = mapBinding.getRoot();
 
-        final Point point = Point.fromLngLat(145.045837, -37.876823 );
+        LatLng latLng = getLocationFromAddress(MapFragment.this.getActivity(), "900 Dandenong Rd, Caulfield East");
+        final Point point = Point.fromLngLat(latLng.longitude, latLng.latitude);
         mapView = mapBinding.mapView;
         CameraOptions cameraPosition = new CameraOptions.Builder()
                 .zoom(13.0)
@@ -67,10 +73,11 @@ public class MapFragment extends Fragment {
         mapView = mapBinding.mapView;
         Bitmap bitmap = bitmapFromDrawableRes(MapFragment.this.getActivity(), R.drawable.red_marker);
 
+        LatLng latLng = getLocationFromAddress(MapFragment.this.getActivity(), "900 Dandenong Rd, Caulfield East");
         AnnotationPlugin annotationApi = mapView.getPlugin(Plugin.MAPBOX_ANNOTATION_PLUGIN_ID);
         AnnotationManager pointAnnotationManager = annotationApi.createAnnotationManager(AnnotationType.PointAnnotation,null);
         PointAnnotationOptions pointAnnotationOptions = new
-                PointAnnotationOptions().withPoint(Point.fromLngLat(145.045837, -37.876823)).withIconImage(bitmap);
+                PointAnnotationOptions().withPoint(Point.fromLngLat(latLng.longitude, latLng.latitude)).withIconImage(bitmap);
         pointAnnotationManager.create(pointAnnotationOptions);
     }
 
@@ -102,4 +109,21 @@ public class MapFragment extends Fragment {
             }
         }
     }
+
+    public LatLng getLocationFromAddress(Context context, String strAddress) {
+        Geocoder geocoder = new Geocoder(context);
+        List<Address> addressList;
+        LatLng latLng = null;
+        try {
+            addressList = geocoder.getFromLocationName(strAddress, 1);
+            if (strAddress!=null) {
+                Address location = addressList.get(0);
+                latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return latLng;
+    }
+
 }

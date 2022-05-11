@@ -1,5 +1,6 @@
 package com.example.fit5046_lab5_groupe;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -15,9 +16,16 @@ import android.widget.Toast;
 
 import com.example.fit5046_lab5_groupe.databinding.ActivityLoginBinding;
 import com.example.fit5046_lab5_groupe.fragment.HomeFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+
+import java.util.concurrent.TimeUnit;
 
 public class Login extends AppCompatActivity {
     private ActivityLoginBinding binding;
@@ -58,16 +66,21 @@ public class Login extends AppCompatActivity {
         binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String txt_Email = emailEditText.getText().toString();
-                String txt_Pwd = passwordEditText.getText().toString();
-                loginUser(txt_Email,txt_Pwd);
+                try {
+                    String txt_Email = emailEditText.getText().toString();
+                    String txt_Pwd = passwordEditText.getText().toString();
+                    loginUser(txt_Email, txt_Pwd);
+                } catch (IllegalArgumentException e) {
+                    toastMsg("Email address or password is empty");
+                }
             }
         });
     }
-    private void loginUser(String txt_email, String txt_pwd) {
+    /**
+    private void loginUser(String txt_email, String txt_pwd)  {
         // call the object and provide it with email id and password
-        auth.signInWithEmailAndPassword(txt_email,
-                txt_pwd).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+        Task task = auth.signInWithEmailAndPassword(txt_email, txt_pwd);
+        task.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
                 String msg = "Login Successful";
@@ -77,6 +90,27 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+     */
+
+    private void loginUser(String txt_email, String txt_pwd) {
+        auth.signInWithEmailAndPassword(txt_email, txt_pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    String msg =  "Login Successful";
+                    toastMsg(msg);
+                    startActivity(new Intent(Login.this,
+                            MainActivity.class));
+
+                }
+                else {
+                    String msg = "Login failed. Please check your email and password";
+                    toastMsg(msg);
+                }
+            }
+        });
+    }
+
     public void toastMsg(String message){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
