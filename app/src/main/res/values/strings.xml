@@ -8,4 +8,5 @@
     <string name="confirm_password_hint">Confirm password</string>
     <string name="reset_password">Reset Password</string>
     <string name="welcome">Welcome to\nBooking your RAT</string>
+    <string name="mapbox_access_token">pk.eyJ1Ijoic2h1YW5nMDExNnoiLCJhIjoiY2wyenBrMmR5MTM1MzNqcDhlN3RnbmQ0ZyJ9.7kj8_zkdIg1Eo49bMPUrjg</string>
 </resources>
