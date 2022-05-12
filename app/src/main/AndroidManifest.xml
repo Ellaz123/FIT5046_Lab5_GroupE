@@ -30,6 +30,7 @@
         </activity>
         <activity android:name=".LoginEntry" />
         <activity android:name=".RegisterEntry" />
+        <activity android:name=".ResetPassword" />
     </application>
 
 </manifest>

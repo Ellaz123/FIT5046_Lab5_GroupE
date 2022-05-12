@@ -38,6 +38,7 @@ public class SignUp extends AppCompatActivity {
                 String email_txt = emailEditText.getText().toString();
                 String password_txt = passwordEditText.getText().toString();
                 String confirmPwd_txt = confirmPasswordEditText.getText().toString();
+                String address_txt = binding.editTextTextPostalAddress.getText().toString();
                 if (TextUtils.isEmpty(email_txt) ||
                         TextUtils.isEmpty(password_txt)) {
                     String msg = "Empty Username or Password";
@@ -47,6 +48,9 @@ public class SignUp extends AppCompatActivity {
                     toastMsg(msg);
                 } else if (! password_txt.equals(confirmPwd_txt)) {
                     String msg = "Confirm password fail";
+                    toastMsg(msg);
+                } else if (TextUtils.isEmpty(address_txt)) {
+                    String msg = "Empty Address";
                     toastMsg(msg);
                 }
                 else
@@ -79,6 +83,4 @@ public class SignUp extends AppCompatActivity {
     public void toastMsg(String message){
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
     }
-
-
 }
