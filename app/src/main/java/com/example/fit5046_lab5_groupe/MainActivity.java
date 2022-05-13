@@ -42,4 +42,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.appBar.toolbar,navController,
                 mAppBarConfiguration);
     }
+
+    public static class BottomDialog {
+    }
 }

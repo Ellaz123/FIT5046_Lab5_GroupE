@@ -56,11 +56,24 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata:2.4.0'
 
     implementation("com.google.android.gms:play-services-location:18.0.0")
+
+    //anyChart
+    implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
+
+    // calendar event
+//    implementation 'com.google.api-client:google-api-client:1.33.0'
+//    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.32.1'
+//    implementation 'com.google.apis:google-api-services-calendar:v3-rev20211026-1.32.1'
     //MapBox
     implementation ('com.mapbox.maps:android:10.4.0'){
         exclude group: 'group_name', module: 'module_name'
+
     }
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    //日期选择器/地址选择器
+    implementation 'com.contrarywind:Android-PickerView:4.1.9'
+
 
 
 }

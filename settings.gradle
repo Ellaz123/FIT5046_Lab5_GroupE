@@ -20,18 +20,18 @@ dependencyResolutionManagement {
                 password = "sk.eyJ1Ijoic2h1YW5nMDExNnoiLCJhIjoiY2wyenB5bnltMWh4eDNrazZldm5qbjVmMiJ9.OpFDofBPqxi6PeEm4aqS2g"
             }
         }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         google()
         mavenCentral()
-        maven {
-            url 'https://api.mapbox.com/downloads/v2/releases/maven'
-            authentication {
-                basic(BasicAuthentication)
-            }
-            credentials {
-                username = "mapbox"
-                password = MAPBOX_DOWNLOADS_TOKEN
-            }
+
+
+        //anychart
+        maven{
+            url 'https://jitpack.io'
         }
+
     }
 }
 rootProject.name = "FIT5046_Lab5_GroupE"
