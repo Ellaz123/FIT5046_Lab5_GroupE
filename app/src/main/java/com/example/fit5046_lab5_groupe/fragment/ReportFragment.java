@@ -30,6 +30,13 @@ import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.listener.ListenersInterface;
 import com.anychart.charts.Pie;
 import com.anychart.enums.Align;
+import com.anychart.charts.Cartesian;
+import com.anychart.core.cartesian.series.Column;
+import com.anychart.enums.Anchor;
+import com.anychart.enums.HoverMode;
+import com.anychart.enums.Position;
+import com.anychart.enums.TooltipPositionMode;
+
 
 import com.anychart.enums.LegendLayout;
 
@@ -48,6 +55,7 @@ public class ReportFragment extends Fragment {
     private int year, month, day;
     List<DataEntry> data = new ArrayList<>();
     private Pie pie;
+    private Column column;
 
 
     @Override
@@ -57,6 +65,7 @@ public class ReportFragment extends Fragment {
         //SharedViewModel model = new ViewModelProvider(getActivity()).get(SharedViewModel.class);
         initData();
         initPic();
+        initColumnc();
         //获取当前日期  开始
         getbeginDate();
         btnbegin = binding.btnbegin;
@@ -84,20 +93,22 @@ public class ReportFragment extends Fragment {
             bottomDialog.setListener(new BottomDialog.BottomDialogListener() {
                 @Override
                 public void onPieChart() {
-                    //生成Pie图
+                    //pie chart
                     binding.anyChartView.setVisibility(View.VISIBLE);
+                    initPic();
                 }
 
                 @Override
                 public void onColumnChart() {
-                    // TODO: 2022/5/13 生成柱形图
+                    // column chart
+                    binding.anyChartView.setVisibility(View.VISIBLE);
+                    initColumnc();
                 }
             });
             bottomDialog.show();
         });
 
         return view;
-
 
     }
 
@@ -129,29 +140,60 @@ public class ReportFragment extends Fragment {
         binding.anyChartView.setChart(pie);
     }
 
-    private void initData() {
-        data.add(new ValueDataEntry("Apples", 6371664));
-        data.add(new ValueDataEntry("Pears", 789622));
-        data.add(new ValueDataEntry("Bananas", 7216301));
-        data.add(new ValueDataEntry("Grapes", 1486621));
-        data.add(new ValueDataEntry("Oranges", 1200000));
+    private void initColumnc() {
+
+        binding.anyChartView.setProgressBar(binding.progressBar);
+        Cartesian cartesian = AnyChart.column();
+        Column column = cartesian.column(data);
+
+        column.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0d)
+                .offsetY(5d)
+                .format("${%Value}{groupsSeparator: }");
+
+        cartesian.animation(true);
+        cartesian.title("Top 10 Cosmetic Products by Revenue");
+
+        cartesian.yScale().minimum(0d);
+
+        cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+
+        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
+        cartesian.interactivity().hoverMode(HoverMode.BY_X);
+
+        cartesian.xAxis(0).title("Product");
+        cartesian.yAxis(0).title("Revenue");
+
+        binding.anyChartView.setChart(cartesian);
     }
 
-    //获取当前日期  开始
-    private void getbeginDate() {
-        cal = Calendar.getInstance();
-        year = cal.get(Calendar.YEAR);       //获取年月日时分秒
-        month = cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
-        day = cal.get(Calendar.DAY_OF_MONTH);
-    }
 
-    //获取当前日期  结束
-    private void getoverDate() {
-        cal = Calendar.getInstance();
-        year = cal.get(Calendar.YEAR);       //获取年月日时分秒
-        month = cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
-        day = cal.get(Calendar.DAY_OF_MONTH);
-    }
+private void initData(){
+        data.add(new ValueDataEntry("Apples",6371664));
+        data.add(new ValueDataEntry("Pears",789622));
+        data.add(new ValueDataEntry("Bananas",7216301));
+        data.add(new ValueDataEntry("Grapes",1486621));
+        data.add(new ValueDataEntry("Oranges",1200000));
+        }
+
+//获取当前日期  开始
+private void getbeginDate(){
+        cal=Calendar.getInstance();
+        year=cal.get(Calendar.YEAR);       //获取年月日时分秒
+        month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day=cal.get(Calendar.DAY_OF_MONTH);
+        }
+
+//获取当前日期  结束
+private void getoverDate(){
+        cal=Calendar.getInstance();
+        year=cal.get(Calendar.YEAR);       //获取年月日时分秒
+        month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day=cal.get(Calendar.DAY_OF_MONTH);
+        }
 
 
-}
+        }
