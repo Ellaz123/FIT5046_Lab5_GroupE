@@ -8,10 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.fit5046_lab5_groupe.R;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.fit5046_lab5_groupe.databinding.MapFragmentBinding;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mapbox.geojson.Point;
 import com.mapbox.maps.CameraOptions;
 import com.mapbox.maps.MapView;
@@ -21,23 +29,17 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.annotation.DrawableRes;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
-import com.mapbox.geojson.Point;
-import com.mapbox.maps.MapView;
-import com.mapbox.maps.Style;
+
 import com.mapbox.maps.plugin.Plugin;
 import com.mapbox.maps.plugin.annotation.*;
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotation;
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions;
-import com.mapbox.maps.plugin.delegates.MapPluginProviderDelegate;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.util.List;
-import java.util.Map;
 
 public class MapFragment extends Fragment {
     private MapView mapView;
@@ -53,31 +55,53 @@ public class MapFragment extends Fragment {
         // Inflate the View for this fragment
         mapBinding = MapFragmentBinding.inflate(inflater, container, false);
         View view = mapBinding.getRoot();
+        FirebaseDatabase database = FirebaseDatabase.
+                getInstance("https://test-487f4-default-rtdb.asia-southeast1.firebasedatabase.app");
+        DatabaseReference mDatabase = database.getReference();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String email = user.getEmail().replace(".","");
+        mDatabase.child("users").child(email).child("address").get().
+                addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    toastMsg("Error getting data");
+                }
+                else {
+                    String address = String.valueOf(task.getResult().getValue());
+                    mapBinding.textView4.setText(address);
+                    // Test address "900 Dandenong Rd, Caulfield East"
+                    LatLng latLng = getLocationFromAddress(MapFragment.this.getActivity(), address);
+                    final Point point = Point.fromLngLat(latLng.longitude, latLng.latitude);
+                    mapView = mapBinding.mapView;
+                    CameraOptions cameraPosition = new CameraOptions.Builder()
+                            .zoom(13.0)
+                            .center(point)
+                            .build();
 
-        LatLng latLng = getLocationFromAddress(MapFragment.this.getActivity(), "900 Dandenong Rd, Caulfield East");
-        final Point point = Point.fromLngLat(latLng.longitude, latLng.latitude);
-        mapView = mapBinding.mapView;
-        CameraOptions cameraPosition = new CameraOptions.Builder()
-                .zoom(13.0)
-                .center(point)
-                .build();
+                    mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
+                    mapView.getMapboxMap().setCamera(cameraPosition);
+                    addAnnotationToMap(address);
+                }
+            }
+        });
 
-        mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
-        mapView.getMapboxMap().setCamera(cameraPosition);
-        addAnnotationToMap();
+
 
         return view;
     }
 
-    private void addAnnotationToMap() {
+    private void addAnnotationToMap(String address) {
         mapView = mapBinding.mapView;
         Bitmap bitmap = bitmapFromDrawableRes(MapFragment.this.getActivity(), R.drawable.red_marker);
 
-        LatLng latLng = getLocationFromAddress(MapFragment.this.getActivity(), "900 Dandenong Rd, Caulfield East");
+        LatLng latLng = getLocationFromAddress(MapFragment.this.getActivity(), address);
         AnnotationPlugin annotationApi = mapView.getPlugin(Plugin.MAPBOX_ANNOTATION_PLUGIN_ID);
-        AnnotationManager pointAnnotationManager = annotationApi.createAnnotationManager(AnnotationType.PointAnnotation,null);
+        AnnotationManager pointAnnotationManager = annotationApi.
+                createAnnotationManager(AnnotationType.PointAnnotation,null);
         PointAnnotationOptions pointAnnotationOptions = new
-                PointAnnotationOptions().withPoint(Point.fromLngLat(latLng.longitude, latLng.latitude)).withIconImage(bitmap);
+                PointAnnotationOptions().withPoint(Point.
+                fromLngLat(latLng.longitude, latLng.latitude)).withIconImage(bitmap);
         pointAnnotationManager.create(pointAnnotationOptions);
     }
 
@@ -124,6 +148,10 @@ public class MapFragment extends Fragment {
             ex.printStackTrace();
         }
         return latLng;
+    }
+
+    public void toastMsg(String message){
+        Toast.makeText(MapFragment.this.getActivity(),message, Toast.LENGTH_SHORT).show();
     }
 
 }

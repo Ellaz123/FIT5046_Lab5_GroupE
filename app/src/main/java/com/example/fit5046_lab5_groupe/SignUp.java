@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUp extends AppCompatActivity {
     private ActivitySignUpBinding binding;
@@ -54,7 +56,7 @@ public class SignUp extends AppCompatActivity {
                     toastMsg(msg);
                 }
                 else
-                    registerUser(email_txt, password_txt);
+                    registerUser(email_txt, password_txt, address_txt);
             }
         });
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +66,7 @@ public class SignUp extends AppCompatActivity {
             }
         });
     }
-    private void registerUser(String email_txt, String password_txt) {
+    private void registerUser(String email_txt, String password_txt, String address_txt) {
 
         auth.createUserWithEmailAndPassword(email_txt,password_txt).addOnCompleteListener(
                 new OnCompleteListener<AuthResult>() {
@@ -72,6 +74,8 @@ public class SignUp extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
                     String msg = "Registration Successful";
+                    writeNewUser(email_txt, address_txt);
+                    toastMsg(msg);
                     startActivity(new Intent(SignUp.this, Login.class));
                 }else {
                     String msg = "Registration Unsuccessful";
@@ -80,6 +84,16 @@ public class SignUp extends AppCompatActivity {
             }
         });
     }
+
+    public void writeNewUser(String email, String address) {
+        email = email.replace(".", "");
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://test-487f4-default-rtdb.asia-southeast1.firebasedatabase.app");
+        DatabaseReference mDatabase = database.getReference();
+        mDatabase.child("users").child(email).child("address").setValue(address);
+    }
+
+
     public void toastMsg(String message){
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
     }
