@@ -69,8 +69,8 @@ public class MapFragment extends Fragment {
                 }
                 else {
                     String address = String.valueOf(task.getResult().getValue());
-                    mapBinding.textView4.setText(address);
-                    // Test address "900 Dandenong Rd, Caulfield East"
+                    mapBinding.textView4.setText("This is your address:" + address);
+                    // Example address "900 Dandenong Rd, Caulfield East"
                     LatLng latLng = getLocationFromAddress(MapFragment.this.getActivity(), address);
                     final Point point = Point.fromLngLat(latLng.longitude, latLng.latitude);
                     mapView = mapBinding.mapView;
