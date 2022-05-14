@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -26,6 +28,8 @@ import android.widget.Toast;
 
 import com.example.fit5046_lab5_groupe.R;
 import com.example.fit5046_lab5_groupe.databinding.DataEntryFragmentBinding;
+import com.example.fit5046_lab5_groupe.entity.Order;
+import com.example.fit5046_lab5_groupe.viewmodel.OrderViewModel;
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.Slider;
 
@@ -33,6 +37,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -56,6 +61,8 @@ public class DataEntryFragment extends Fragment {
 
     private String orderDate, orderTime, numRat, ratType, oName, oPhone, orderInfo;
 
+    private OrderViewModel orderViewModel;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +73,26 @@ public class DataEntryFragment extends Fragment {
                              Bundle savedInstanceState) {
         dataBinding = DataEntryFragmentBinding.inflate(inflater, container, false);
         View view = dataBinding.getRoot();
+
+        orderViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()).
+                create(OrderViewModel.class);
+
+        orderViewModel.getAllCustomers().observe(getViewLifecycleOwner(), new Observer<List<Order>>() {
+            @Override
+            public void onChanged(List<Order> orders) {
+                String allOrders = "";
+                int count = 1;
+                for(Order temp: orders){
+                    String orderDetails = (count + " " + temp.orderDate+" "+temp.orderTime+" "
+                            +temp.numRat + " " + temp.ratType + " " + temp.customerName + " " +
+                            temp.customerPhone);
+                    allOrders = allOrders + System.getProperty("line.separator") + orderDetails;
+                    count += 1;
+                }
+                dataBinding.textViewInsert.setText(allOrders);
+            }
+        });
+
         myDatePicker();
         dateBtn = dataBinding.dateBtn;
         dateBtn.setText(getCurrentDate());
@@ -159,10 +186,15 @@ public class DataEntryFragment extends Fragment {
                     oName = name.getText().toString();
                     oPhone = phone.getText().toString();
 
+                    Order order = new Order(orderDate, orderTime, numRat, ratType, oName, oPhone);
+
+                    orderViewModel.insert(order);
+
+
                     orderInfo = orderDate + "," + orderTime + "," + numRat + ","
                             + ratType + "," + oName +
                             "," + oPhone;
-                    dataBinding.editTextTextPersonName.setText(orderInfo);
+                    //dataBinding.editTextTextPersonName.setText(orderInfo);
                 }
 
 
