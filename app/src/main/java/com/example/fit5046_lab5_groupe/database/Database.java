@@ -6,6 +6,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.example.fit5046_lab5_groupe.dao.OrderDAO;
+import com.example.fit5046_lab5_groupe.dao.UserDAO;
 import com.example.fit5046_lab5_groupe.entity.Order;
 import com.example.fit5046_lab5_groupe.entity.User;
 
@@ -15,6 +16,7 @@ import java.util.concurrent.*;
 public abstract class Database extends RoomDatabase {
 
     public abstract OrderDAO orderDao();
+    public abstract UserDAO userDao();
 
     private static Database INSTANCE;
 

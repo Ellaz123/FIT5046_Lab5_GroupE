@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 
-
+@Entity
 public class User {
     @PrimaryKey(autoGenerate = true)
     public int uid;
