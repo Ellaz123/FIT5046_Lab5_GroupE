@@ -1,7 +1,9 @@
 package com.example.fit5046_lab5_groupe.fragment;
 
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +11,14 @@ import android.view.ViewGroup;
 import com.example.fit5046_lab5_groupe.R;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.example.fit5046_lab5_groupe.dao.UserDAO;
+import com.example.fit5046_lab5_groupe.database.Database;
 import com.example.fit5046_lab5_groupe.databinding.MapFragmentBinding;
+import com.example.fit5046_lab5_groupe.entity.User;
+import com.example.fit5046_lab5_groupe.viewmodel.UserViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,6 +40,8 @@ import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.mapbox.maps.plugin.Plugin;
 import com.mapbox.maps.plugin.annotation.*;
@@ -40,10 +49,13 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class MapFragment extends Fragment {
     private MapView mapView;
     private MapFragmentBinding mapBinding;
+    private UserViewModel userViewModel;
+    private UserDAO userDAO;
 
 
     public MapFragment() {
@@ -54,6 +66,37 @@ public class MapFragment extends Fragment {
                              Bundle savedInstanceState) {
         mapBinding = MapFragmentBinding.inflate(inflater, container, false);
         View view = mapBinding.getRoot();
+
+        String email = this.getActivity().getIntent().getStringExtra("CurrentUserEmail");
+        email = email.replace(".", "");
+        userViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getActivity().getApplication()).create(UserViewModel.class);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                userViewModel.findByEmailFuture(email).thenApply(user -> {
+                String address = user.address;
+                mapBinding.textView4.setText("This is your address:" + address);
+                LatLng latLng = getLocationFromAddress(MapFragment.this.getActivity(), address);
+                final Point point = Point.fromLngLat(latLng.longitude, latLng.latitude);
+                mapView = mapBinding.mapView;
+                CameraOptions cameraPosition = new CameraOptions.Builder()
+                        .zoom(13.0)
+                        .center(point)
+                        .build();
+
+                mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
+                mapView.getMapboxMap().setCamera(cameraPosition);
+                addAnnotationToMap(address);
+                return user;});}
+
+        //toastMsg("Error");
+        //mapBinding.textView4.setText("null");
+
+
+
+
+
+
+
+        /**
         FirebaseDatabase database = FirebaseDatabase.
                 getInstance("https://test-487f4-default-rtdb.asia-southeast1.firebasedatabase.app");
         DatabaseReference mDatabase = database.getReference();
@@ -84,7 +127,7 @@ public class MapFragment extends Fragment {
                 }
             }
         });
-
+        **/
 
 
         return view;
@@ -150,7 +193,7 @@ public class MapFragment extends Fragment {
     }
 
     public void toastMsg(String message){
-        Toast.makeText(MapFragment.this.getActivity(),message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getActivity(),message, Toast.LENGTH_SHORT).show();
     }
 
 }

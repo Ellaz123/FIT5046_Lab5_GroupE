@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.fit5046_lab5_groupe.databinding.ActivityMainBinding;
+import com.example.fit5046_lab5_groupe.entity.User;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         //Sets up a Toolbar for use with a NavController.
         NavigationUI.setupWithNavController(binding.appBar.toolbar,navController,
                 mAppBarConfiguration);
+
     }
 
     public static class BottomDialog {

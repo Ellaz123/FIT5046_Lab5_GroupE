@@ -12,7 +12,7 @@ import com.example.fit5046_lab5_groupe.entity.User;
 
 import java.util.concurrent.*;
 
-@androidx.room.Database(entities = {User.class, Order.class}, version = 2, exportSchema = false)
+@androidx.room.Database(entities = {User.class, Order.class}, version = 3, exportSchema = false)
 public abstract class Database extends RoomDatabase {
 
     public abstract OrderDAO orderDao();

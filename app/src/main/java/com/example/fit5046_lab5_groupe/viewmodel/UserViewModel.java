@@ -26,13 +26,16 @@ public class UserViewModel extends AndroidViewModel {
     public CompletableFuture<User> findByIDFuture(final int UserId){
         return cRepository.findByIDFuture(UserId);
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public CompletableFuture<User> findByEmailFuture(final String email){
+        return cRepository.findByEmailFuture(email);
+    }
     public LiveData<List<User>> getAllUsers() {
         return allUsers;
     }
     public void insert(User User) {
         cRepository.insert(User);
     }
-
     public void deleteAll() {
         cRepository.deleteAll();
     }

@@ -67,5 +67,14 @@ public class UserRepository {
             }
         }, Database.databaseWriteExecutor);
     }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public CompletableFuture<User> findByEmailFuture(final String email) {
+        return CompletableFuture.supplyAsync(new Supplier<User>() {
+            @Override
+            public User get() {
+                return UserDao.findByEmail(email);
+            }
+        }, Database.databaseWriteExecutor);
+    }
 }
 

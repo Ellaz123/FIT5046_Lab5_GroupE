@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Order {
     @PrimaryKey (autoGenerate = true)
-    public int orderid;
+    public int uid;
 
     @ColumnInfo(name = "order_date")
     @NonNull

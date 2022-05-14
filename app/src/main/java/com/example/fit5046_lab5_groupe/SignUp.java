@@ -2,6 +2,7 @@ package com.example.fit5046_lab5_groupe;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.fit5046_lab5_groupe.dao.UserDAO;
 import com.example.fit5046_lab5_groupe.databinding.ActivitySignUpBinding;
+import com.example.fit5046_lab5_groupe.entity.User;
+import com.example.fit5046_lab5_groupe.viewmodel.OrderViewModel;
+import com.example.fit5046_lab5_groupe.viewmodel.UserViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -22,12 +27,15 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SignUp extends AppCompatActivity {
     private ActivitySignUpBinding binding;
     private FirebaseAuth auth;
+    private UserViewModel userViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
         auth = FirebaseAuth.getInstance();
         Button registerButton = binding.registerBtn;
         Button backButton = binding.backBtn;
@@ -87,10 +95,12 @@ public class SignUp extends AppCompatActivity {
 
     public void writeNewUser(String email, String address) {
         email = email.replace(".", "");
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://test-487f4-default-rtdb.asia-southeast1.firebasedatabase.app");
-        DatabaseReference mDatabase = database.getReference();
-        mDatabase.child("users").child(email).child("address").setValue(address);
+        //FirebaseDatabase database = FirebaseDatabase.getInstance("https://test-487f4-default-rtdb.asia-southeast1.firebasedatabase.app");
+        //DatabaseReference mDatabase = database.getReference();
+        //mDatabase.child("users").child(email).child("address").setValue(address);
+        userViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(UserViewModel.class);
+        User user = new User(email, address);
+        userViewModel.insert(user);
     }
 
 

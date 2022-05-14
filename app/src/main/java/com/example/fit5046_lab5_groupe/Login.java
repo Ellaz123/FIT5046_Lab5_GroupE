@@ -28,6 +28,9 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseUser user;
 
+/**
+ * When a user completes registration, autofill the email and password in login screen
+ *
     private final ActivityResultLauncher<Intent> signUpLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -43,6 +46,18 @@ public class Login extends AppCompatActivity {
                             }
                         }
                     });
+ **/
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null) {
+            user.reload();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +71,7 @@ public class Login extends AppCompatActivity {
         binding.signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Login.this, SignUp.class);
-                signUpLauncher.launch(intent);
+                startActivity(new Intent(Login.this, SignUp.class));
             }
         });
         binding.loginBtn.setOnClickListener(new View.OnClickListener() {
@@ -79,7 +93,10 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
     /**
+     * Old version of login
+     *
     private void loginUser(String txt_email, String txt_pwd)  {
         // call the object and provide it with email id and password
         Task task = auth.signInWithEmailAndPassword(txt_email, txt_pwd);
@@ -102,9 +119,9 @@ public class Login extends AppCompatActivity {
                 if (task.isSuccessful()){
                     String msg =  "Login Successful";
                     toastMsg(msg);
-                    startActivity(new Intent(Login.this,
-                            MainActivity.class));
-
+                    Intent intent = new Intent(Login.this, MainActivity.class);
+                    intent.putExtra("CurrentUserEmail",txt_email);
+                    startActivity(intent);
                 }
                 else {
                     String msg = "Login failed. Please check your email and password";
