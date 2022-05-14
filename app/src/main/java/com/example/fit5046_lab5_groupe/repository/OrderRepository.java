@@ -7,7 +7,7 @@ import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 
 import com.example.fit5046_lab5_groupe.dao.OrderDAO;
-import com.example.fit5046_lab5_groupe.database.OrderDatabase;
+import com.example.fit5046_lab5_groupe.database.Database;
 import com.example.fit5046_lab5_groupe.entity.Order;
 
 import java.util.*;
@@ -19,7 +19,7 @@ public class OrderRepository {
     private LiveData<List<Order>> allOrders;
 
     public OrderRepository(Application application){
-        OrderDatabase db = OrderDatabase.getInstance(application);
+        Database db = Database.getInstance(application);
         orderDao =db.orderDao();
         allOrders= orderDao.getAll();
     }
@@ -29,7 +29,7 @@ public class OrderRepository {
     }
 
     public void insert(final Order order){
-        OrderDatabase.databaseWriteExecutor.execute(new Runnable() {
+        Database.databaseWriteExecutor.execute(new Runnable() {
         @Override
         public void run() {
             orderDao.insert(order);
@@ -37,7 +37,7 @@ public class OrderRepository {
     }
 
     public void deleteAll() {
-        OrderDatabase.databaseWriteExecutor.execute(new Runnable() {
+        Database.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 orderDao.deleteAll();
@@ -46,7 +46,7 @@ public class OrderRepository {
     }
 
     public void delete(final Order order){
-        OrderDatabase.databaseWriteExecutor.execute(new Runnable() {
+        Database.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 orderDao.delete(order);
@@ -55,7 +55,7 @@ public class OrderRepository {
     }
 
     public void updateOrder(final Order order){
-        OrderDatabase.databaseWriteExecutor.execute(new Runnable() {
+        Database.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() { orderDao.updateOrder(order);
             }
@@ -69,6 +69,6 @@ public class OrderRepository {
             public Order get() {
                 return orderDao.findByID(orderId);
             }
-        }, OrderDatabase.databaseWriteExecutor);
+        }, Database.databaseWriteExecutor);
     }
 }

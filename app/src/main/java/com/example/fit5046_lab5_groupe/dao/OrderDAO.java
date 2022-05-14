@@ -13,10 +13,10 @@ import java.util.*;
 
 @Dao
 public interface OrderDAO {
-    @Query("SELECT * FROM `order` ORDER BY uid ASC")
+    @Query("SELECT * FROM `order` ORDER BY orderId ASC")
     LiveData<List<Order>> getAll();
 
-    @Query("SELECT * FROM `order` WHERE uid = :orderId LIMIT 1")
+    @Query("SELECT * FROM `order` WHERE orderId = :orderId LIMIT 1")
     Order findByID(int orderId);
 
     @Insert
