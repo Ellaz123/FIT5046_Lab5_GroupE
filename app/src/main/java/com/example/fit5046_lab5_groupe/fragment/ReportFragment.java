@@ -48,6 +48,7 @@ import java.util.Locale;
 //import com.example.fit5046_lab5_groupe.viewmodel.SharedViewModel;
 public class ReportFragment extends Fragment {
     private ReportFragmentBinding binding;
+
     private TextView btnbegin;
     private TextView btnover;
     private Calendar cal;
@@ -56,14 +57,16 @@ public class ReportFragment extends Fragment {
     private Pie pie;
     private Column column;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = ReportFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         //SharedViewModel model = new ViewModelProvider(getActivity()).get(SharedViewModel.class);
         initData();
-
-        //get start date
+        initPic();
+        initColumnc();
+        //获取当前日期  开始
         getbeginDate();
         btnbegin = binding.btnbegin;
         btnbegin.setOnClickListener(v -> {
@@ -74,7 +77,7 @@ public class ReportFragment extends Fragment {
             pvTime.show();
         });
 
-        //get end date
+        //获取当前日期  结束
         getoverDate();
         btnover = binding.btnover;
         btnover.setOnClickListener(v -> {
@@ -91,7 +94,6 @@ public class ReportFragment extends Fragment {
                 @Override
                 public void onPieChart() {
                     //pie chart
-                    binding.anyChartView.setChart(null);
                     binding.anyChartView.setVisibility(View.VISIBLE);
                     initPic();
                 }
@@ -99,7 +101,6 @@ public class ReportFragment extends Fragment {
                 @Override
                 public void onColumnChart() {
                     // column chart
-                    binding.anyChartView.setChart(null);
                     binding.anyChartView.setVisibility(View.VISIBLE);
                     initColumnc();
                 }
@@ -114,6 +115,7 @@ public class ReportFragment extends Fragment {
     private void initPic() {
         binding.anyChartView.setProgressBar(binding.progressBar);
         pie = AnyChart.pie();
+
         pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
             @Override
             public void onClick(Event event) {
@@ -169,28 +171,29 @@ public class ReportFragment extends Fragment {
     }
 
 
-    private void initData() {
-        data.add(new ValueDataEntry("Apples", 6371664));
-        data.add(new ValueDataEntry("Pears", 789622));
-        data.add(new ValueDataEntry("Bananas", 7216301));
-        data.add(new ValueDataEntry("Grapes", 1486621));
-        data.add(new ValueDataEntry("Oranges", 1200000));
-    }
+private void initData(){
+        data.add(new ValueDataEntry("Apples",6371664));
+        data.add(new ValueDataEntry("Pears",789622));
+        data.add(new ValueDataEntry("Bananas",7216301));
+        data.add(new ValueDataEntry("Grapes",1486621));
+        data.add(new ValueDataEntry("Oranges",1200000));
+        }
 
-    private void getbeginDate() {
-        cal = Calendar.getInstance();
-        year = cal.get(Calendar.YEAR);
-        month = cal.get(Calendar.MONTH);
-        day = cal.get(Calendar.DAY_OF_MONTH);
-    }
+//获取当前日期  开始
+private void getbeginDate(){
+        cal=Calendar.getInstance();
+        year=cal.get(Calendar.YEAR);       //获取年月日时分秒
+        month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day=cal.get(Calendar.DAY_OF_MONTH);
+        }
+
+//获取当前日期  结束
+private void getoverDate(){
+        cal=Calendar.getInstance();
+        year=cal.get(Calendar.YEAR);       //获取年月日时分秒
+        month=cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day=cal.get(Calendar.DAY_OF_MONTH);
+        }
 
 
-    private void getoverDate() {
-        cal = Calendar.getInstance();
-        year = cal.get(Calendar.YEAR);
-        month = cal.get(Calendar.MONTH);
-        day = cal.get(Calendar.DAY_OF_MONTH);
-    }
-
-
-}
+        }

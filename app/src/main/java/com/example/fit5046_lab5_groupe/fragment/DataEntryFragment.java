@@ -16,9 +16,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import com.example.fit5046_lab5_groupe.R;
 import com.example.fit5046_lab5_groupe.databinding.DataEntryFragmentBinding;
+import com.google.android.material.slider.LabelFormatter;
+import com.google.android.material.slider.Slider;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,8 +42,19 @@ public class DataEntryFragment extends Fragment {
     private TimePickerDialog timePickerDialog;
     private Button dateBtn;
     private  Button timeBtn;
+    private SeekBar seekBar;
+    private TextView textView;
+    private TextView textViewRadio;
+    private RadioGroup radioGroup;
+    private RadioButton radioButton;
+    private EditText name;
+    private EditText phone;
+    private  Button button;
 
     private int hour, minute;
+    private int numRats;
+
+    private String orderDate, orderTime, numRat, ratType, oName, oPhone, orderInfo;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,10 +87,105 @@ public class DataEntryFragment extends Fragment {
             }
         });
 
+        seekBar = dataBinding.slider;
+        textView = dataBinding.textViewSlider;
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int rat, boolean b) {
+                textView.setText("Please select of number of RATs: " + String.valueOf(rat));
+                numRat = String.valueOf(rat);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        radioGroup = dataBinding.radio;
+        textViewRadio = dataBinding.rBtnText;
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.radioOne:
+                        textViewRadio.setText("\nPlease select test type: Nasal swabs");
+                        ratType = "Nasal swabs";
+                        break;
+                    case R.id.radioTwo:
+                        textViewRadio.setText("\nPlease select test type: Pharyngeal swab");
+                        ratType = "Pharyngeal swab";
+                        break;
+                }
+            }
+        });
+
+        name = dataBinding.editTextTextPersonName;
+        phone = dataBinding.editTextPhone;
+        button = dataBinding.button2;
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(orderDate.length() == 0)
+                {
+                    dateBtn.setError("Invalid Date.");
+                }
+
+                else if(orderTime.length() == 0)
+                {
+                    timeBtn.setError("Invalid Time");
+                }
+
+                else if(name.length() <= 1 || name.length() >= 15 ||
+                        Character.isUpperCase(name.getText().toString().charAt(0)) == false ||
+                        isNumeric(name.getText().toString()))
+                {
+                    name.setError("Invalid input, the input length should be longer than " +
+                            "1 and smaller than 15, start with a capital letter.");
+                }
+                else if(phone.length() != 10)
+                {
+                    phone.setError("Invalid input, the input should be 10 digits number.");
+                }
+                else
+                {
+                    oName = name.getText().toString();
+                    oPhone = phone.getText().toString();
+
+                    orderInfo = orderDate + "," + orderTime + "," + numRat + ","
+                            + ratType + "," + oName +
+                            "," + oPhone;
+                    dataBinding.editTextTextPersonName.setText(orderInfo);
+                }
+
+
+            }
+        });
 
         return view;
 
     }
+
+    public static boolean isNumeric(String str)
+    {
+        for(int i = 0; i < str.length(); i ++)
+        {
+            int chr = str.charAt(i);
+            if(chr < 48 || chr > 57)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     private void myTimePicker() {
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
@@ -79,6 +194,7 @@ public class DataEntryFragment extends Fragment {
                 hour = sHour;
                 minute = sMinute;
                 timeBtn.setText(String.format(Locale.getDefault(), "%02d:%02d",hour,minute));
+                orderTime = String.format(Locale.getDefault(), "%02d:%02d",hour,minute);
 
             }
         };
@@ -103,10 +219,12 @@ public class DataEntryFragment extends Fragment {
                     if(selectDate.before(now))
                     {
                         dateBtn.setText("Invalid Date");
+                        orderDate = "";
                     }
                     else
                     {
                         dateBtn.setText(date);
+                        orderDate = date;
                     }
 
                 } catch (ParseException e) {
@@ -122,6 +240,7 @@ public class DataEntryFragment extends Fragment {
         int year = calendar.get(Calendar.YEAR);
         int theme = AlertDialog.THEME_HOLO_LIGHT;
         datePickerDialog = new DatePickerDialog(getActivity(), theme,dateSetListener, day, month, year);
+
 
     }
 
