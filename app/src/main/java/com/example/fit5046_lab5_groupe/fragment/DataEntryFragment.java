@@ -46,7 +46,7 @@ public class DataEntryFragment extends Fragment {
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
     private Button dateBtn;
-    private  Button timeBtn;
+    private Button timeBtn;
     private SeekBar seekBar;
     private TextView textView;
     private TextView textViewRadio;
@@ -225,20 +225,20 @@ public class DataEntryFragment extends Fragment {
             public void onTimeSet(TimePicker timePicker, int sHour, int sMinute) {
                 hour = sHour;
                 minute = sMinute;
-                timeBtn.setText(String.format(Locale.getDefault(), "%02d:%02d",hour,minute));
+                timeBtn.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
                 orderTime = String.format(Locale.getDefault(), "%02d:%02d",hour,minute);
 
             }
         };
 
         int theme = AlertDialog.THEME_HOLO_LIGHT;
-        timePickerDialog = new TimePickerDialog(getActivity(),theme,onTimeSetListener, hour, minute,true);
+        timePickerDialog = new TimePickerDialog(getActivity(), theme, onTimeSetListener, hour, minute, true);
 
 
     }
 
     private void myDatePicker() {
-        DatePickerDialog.OnDateSetListener dateSetListener =  new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -247,14 +247,11 @@ public class DataEntryFragment extends Fragment {
                 String currentDate = getCurrentDate();
                 try {
                     Date selectDate = new SimpleDateFormat("dd/MM/yyyy").parse(date);
-                    Date now =  new SimpleDateFormat("dd/MM/yyyy").parse(currentDate);
-                    if(selectDate.before(now))
-                    {
+                    Date now = new SimpleDateFormat("dd/MM/yyyy").parse(currentDate);
+                    if (selectDate.before(now)) {
                         dateBtn.setText("Invalid Date");
                         orderDate = "";
-                    }
-                    else
-                    {
+                    } else {
                         dateBtn.setText(date);
                         orderDate = date;
                     }
@@ -271,20 +268,18 @@ public class DataEntryFragment extends Fragment {
         int month = calendar.get(Calendar.MONTH);
         int year = calendar.get(Calendar.YEAR);
         int theme = AlertDialog.THEME_HOLO_LIGHT;
-        datePickerDialog = new DatePickerDialog(getActivity(), theme,dateSetListener, day, month, year);
+        datePickerDialog = new DatePickerDialog(getActivity(), theme, dateSetListener, day, month, year);
 
 
     }
 
-    private String generateDate(int day, int month, int year)
-    {
+    private String generateDate(int day, int month, int year) {
         String date = day + "/" + month + "/" + year;
 
         return date;
     }
 
-    private String getCurrentDate()
-    {
+    private String getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int month = calendar.get(Calendar.MONTH);
@@ -294,8 +289,7 @@ public class DataEntryFragment extends Fragment {
         return generateDate(day, month, year);
     }
 
-    public void showDatePicker(View view)
-    {
+    public void showDatePicker(View view) {
         datePickerDialog.show();
     }
 

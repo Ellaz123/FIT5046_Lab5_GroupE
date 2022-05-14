@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
+
 }
 
 android {
@@ -25,6 +26,9 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    packagingOptions{
+        resources.excludes.add("META-INF/*")
     }
     buildFeatures {
         viewBinding true
@@ -60,11 +64,14 @@ dependencies {
 
     //anyChart
     implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
+    // covid api
+    implementation('com.squareup.okhttp3:okhttp:4.2.0')
 
     // calendar event
-//    implementation 'com.google.api-client:google-api-client:1.33.0'
-//    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.32.1'
-//    implementation 'com.google.apis:google-api-services-calendar:v3-rev20211026-1.32.1'
+    implementation 'com.google.api-client:google-api-client:1.33.0'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.32.1'
+    implementation 'com.google.apis:google-api-services-calendar:v3-rev20211026-1.32.1'
+
     //MapBox
     implementation('com.mapbox.maps:android:10.4.0') {
         exclude group: 'group_name', module: 'module_name'
@@ -72,19 +79,18 @@ dependencies {
     }
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
-    //日期选择器/地址选择器
+    //date picker
     implementation 'com.contrarywind:Android-PickerView:4.1.9'
 
-    //covid 19 test api
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.google.code.gson:gson:2.8.8'
+
     // ViewModel and LiveData
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.4.0'
     implementation 'androidx.lifecycle:lifecycle-livedata:2.4.0'
     // Room
     implementation 'androidx.room:room-runtime:2.4.1'
     annotationProcessor 'androidx.room:room-compiler:2.4.1'
+
+
 
 }
 
