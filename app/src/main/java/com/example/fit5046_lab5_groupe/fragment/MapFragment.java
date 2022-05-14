@@ -52,7 +52,6 @@ public class MapFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the View for this fragment
         mapBinding = MapFragmentBinding.inflate(inflater, container, false);
         View view = mapBinding.getRoot();
         FirebaseDatabase database = FirebaseDatabase.

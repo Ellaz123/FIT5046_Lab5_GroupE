@@ -11,26 +11,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Select Date:"
-        android:textSize="30sp"
         android:textColor="@color/black"
-        tools:ignore="MissingConstraints" />
+        android:textSize="30sp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="0dp" />
 
     <Button
         android:id="@+id/dateBtn"
         style="?android:spinnerStyle"
         android:layout_width="212dp"
         android:layout_height="42dp"
+        android:onClick="openDatePicker"
         android:text="JAN 01 2022"
         android:textColor="@color/purple_200"
         android:textSize="20dp"
-        android:layout_marginTop="0dp"
-        android:onClick="openDatePicker"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="40dp" />
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textViewTime"
