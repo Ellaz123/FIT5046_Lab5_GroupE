@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.example.fit5046_lab5_groupe.UploadWorker;
 import com.example.fit5046_lab5_groupe.dao.UserDAO;
 import com.example.fit5046_lab5_groupe.database.Database;
 import com.example.fit5046_lab5_groupe.databinding.MapFragmentBinding;
@@ -42,6 +43,9 @@ import androidx.annotation.DrawableRes;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import com.mapbox.maps.plugin.Plugin;
 import com.mapbox.maps.plugin.annotation.*;
@@ -87,11 +91,13 @@ public class MapFragment extends Fragment {
                 addAnnotationToMap(address);
                 return user;});}
 
-        //toastMsg("Error");
-        //mapBinding.textView4.setText("null");
-
-
-
+        mapBinding.button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                WorkRequest uploadWorkRequest = new OneTimeWorkRequest.Builder(UploadWorker.class).build();
+                WorkManager.getInstance(MapFragment.this.getActivity()).enqueue(uploadWorkRequest);
+            }
+        });
 
 
 
