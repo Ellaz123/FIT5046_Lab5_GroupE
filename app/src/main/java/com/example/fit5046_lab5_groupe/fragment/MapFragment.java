@@ -100,8 +100,6 @@ public class MapFragment extends Fragment {
         });
 
 
-
-
         /**
         FirebaseDatabase database = FirebaseDatabase.
                 getInstance("https://test-487f4-default-rtdb.asia-southeast1.firebasedatabase.app");
