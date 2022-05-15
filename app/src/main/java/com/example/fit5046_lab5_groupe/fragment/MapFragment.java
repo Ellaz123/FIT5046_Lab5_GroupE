@@ -52,6 +52,7 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class MapFragment extends Fragment {
     private MapView mapView;
@@ -71,26 +72,35 @@ public class MapFragment extends Fragment {
 
         //Get current user email and search user address from room database
         //Move camera to address location and place a marker
+        mapBinding.RoomBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = MapFragment.this.
+                        getActivity().getIntent().getStringExtra("CurrentUserEmail");
+                email = email.replace(".", "");
+                userViewModel = ViewModelProvider.AndroidViewModelFactory.
+                        getInstance(MapFragment.this.getActivity().
+                                getApplication()).create(UserViewModel.class);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    userViewModel.findByEmailFuture(email).thenApply(user -> {
+                        String address = user.address;
+                        mapBinding.textView4.setText("This is your address:" + address);
+                        LatLng latLng =
+                                getLocationFromAddress(MapFragment.this.getActivity(), address);
+                        final Point point = Point.fromLngLat(latLng.longitude, latLng.latitude);
+                        mapView = mapBinding.mapView;
+                        CameraOptions cameraPosition = new CameraOptions.Builder()
+                                .zoom(13.0)
+                                .center(point)
+                                .build();
 
-        String email = this.getActivity().getIntent().getStringExtra("CurrentUserEmail");
-        email = email.replace(".", "");
-        userViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getActivity().getApplication()).create(UserViewModel.class);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                userViewModel.findByEmailFuture(email).thenApply(user -> {
-                String address = user.address;
-                mapBinding.textView4.setText("This is your address:" + address);
-                LatLng latLng = getLocationFromAddress(MapFragment.this.getActivity(), address);
-                final Point point = Point.fromLngLat(latLng.longitude, latLng.latitude);
-                mapView = mapBinding.mapView;
-                CameraOptions cameraPosition = new CameraOptions.Builder()
-                        .zoom(13.0)
-                        .center(point)
-                        .build();
+                        mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
+                        mapView.getMapboxMap().setCamera(cameraPosition);
+                        addAnnotationToMap(address);
+                        return user;});}
+            }
+        });
 
-                mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
-                mapView.getMapboxMap().setCamera(cameraPosition);
-                addAnnotationToMap(address);
-                return user;});}
 
         mapBinding.button3.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,37 +113,42 @@ public class MapFragment extends Fragment {
 
         //Get current user email and search user address from firebase database
         //Move camera to address location and place a marker
-
-        FirebaseDatabase database = FirebaseDatabase.
-                getInstance("https://test-487f4-default-rtdb.asia-southeast1.firebasedatabase.app");
-        DatabaseReference mDatabase = database.getReference();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String firebaseEmail = user.getEmail().replace(".","");
-        mDatabase.child("users").child(firebaseEmail).child("address").get().
-                addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        mapBinding.FireBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    toastMsg("Error getting data");
-                }
-                else {
-                    String address = String.valueOf(task.getResult().getValue());
-                    mapBinding.textView4.setText("This is your address:" + address);
-                    // Example address "900 Dandenong Rd, Caulfield East"
-                    LatLng latLng = getLocationFromAddress(MapFragment.this.getActivity(), address);
-                    final Point point = Point.fromLngLat(latLng.longitude, latLng.latitude);
-                    mapView = mapBinding.mapView;
-                    CameraOptions cameraPosition = new CameraOptions.Builder()
-                            .zoom(13.0)
-                            .center(point)
-                            .build();
+            public void onClick(View view) {
+                FirebaseDatabase database = FirebaseDatabase.
+                        getInstance("https://test-487f4-default-rtdb.asia-southeast1.firebasedatabase.app");
+                DatabaseReference mDatabase = database.getReference();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String firebaseEmail = user.getEmail().replace(".","");
+                mDatabase.child("users").child(firebaseEmail).child("address").get().
+                        addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                if (!task.isSuccessful()) {
+                                    toastMsg("Error getting data");
+                                }
+                                else {
+                                    String address = String.valueOf(task.getResult().getValue());
+                                    mapBinding.textView4.setText("This is your address:" + address);
+                                    // Example address "900 Dandenong Rd, Caulfield East"
+                                    LatLng latLng = getLocationFromAddress(MapFragment.this.getActivity(), address);
+                                    final Point point = Point.fromLngLat(latLng.longitude, latLng.latitude);
+                                    mapView = mapBinding.mapView;
+                                    CameraOptions cameraPosition = new CameraOptions.Builder()
+                                            .zoom(13.0)
+                                            .center(point)
+                                            .build();
 
-                    mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
-                    mapView.getMapboxMap().setCamera(cameraPosition);
-                    addAnnotationToMap(address);
-                }
+                                    mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
+                                    mapView.getMapboxMap().setCamera(cameraPosition);
+                                    addAnnotationToMap(address);
+                                }
+                            }
+                        });
             }
         });
+
 
 
         return view;
