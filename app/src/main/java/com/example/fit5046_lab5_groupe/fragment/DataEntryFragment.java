@@ -295,7 +295,7 @@ public class DataEntryFragment extends Fragment {
         int month = calendar.get(Calendar.MONTH);
         int year = calendar.get(Calendar.YEAR);
         int theme = AlertDialog.THEME_HOLO_LIGHT;
-        datePickerDialog = new DatePickerDialog(getActivity(), theme, dateSetListener, day, month, year);
+        datePickerDialog = new DatePickerDialog(getActivity(), theme, dateSetListener,year,month,day);
 
 
     }
@@ -313,7 +313,6 @@ public class DataEntryFragment extends Fragment {
         month = month + 1;
         int year = calendar.get(Calendar.YEAR);
 
-        calendar.set(2022, 1, 1);
 
         return generateDate(day, month, year);
     }
