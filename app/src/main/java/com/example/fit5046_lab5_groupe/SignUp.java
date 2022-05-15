@@ -24,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.concurrent.TimeUnit;
+
 public class SignUp extends AppCompatActivity {
     private ActivitySignUpBinding binding;
     private FirebaseAuth auth;
@@ -86,6 +88,12 @@ public class SignUp extends AppCompatActivity {
                 if(task.isSuccessful()) {
                     String msg = "Registration Successful";
                     writeNewUser(email_txt, address_txt);
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(500);
+                    }
+                    catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     toastMsg(msg);
                     startActivity(new Intent(SignUp.this, Login.class));
                 }else {
