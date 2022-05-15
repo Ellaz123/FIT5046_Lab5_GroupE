@@ -59,6 +59,7 @@ public class Login extends AppCompatActivity {
         }
     }
 
+    // Final version
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
