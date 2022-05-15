@@ -1,5 +1,6 @@
 package com.example.fit5046_lab5_groupe;
 
+import com.example.fit5046_lab5_groupe.fragment.DataEntryFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -215,6 +216,7 @@ public class Calender extends Activity {
                     // the start date.
                     start = event.getStart().getDate();
                 }
+                eventStrings.add(DataEntryFragment.getAllOrders());
                 eventStrings.add(
                         String.format("%s (%s)", event.getSummary(), start));
             }

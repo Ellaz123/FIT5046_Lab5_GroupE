@@ -49,6 +49,7 @@ import java.util.Locale;
 
 
 public class DataEntryFragment extends Fragment {
+    private static String allOrders;
     private DataEntryFragmentBinding dataBinding;
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
@@ -69,7 +70,7 @@ public class DataEntryFragment extends Fragment {
     private int hour, minute;
     private int numRats;
 
-    private String orderDate, orderTime, numRat, ratType, oName, oPhone, orderInfo, allOrders;
+    private String orderDate, orderTime, numRat, ratType, oName, oPhone, orderInfo;
 
     private OrderViewModel orderViewModel;
 
@@ -383,5 +384,8 @@ public class DataEntryFragment extends Fragment {
     public void showTimePicker(View view) {
         timePickerDialog.show();
 
+    }
+    public static String getAllOrders(){
+        return allOrders;
     }
 }
