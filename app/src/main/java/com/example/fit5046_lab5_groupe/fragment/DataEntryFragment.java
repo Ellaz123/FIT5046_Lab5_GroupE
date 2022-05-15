@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.fit5046_lab5_groupe.CheckOrder;
 import com.example.fit5046_lab5_groupe.R;
 import com.example.fit5046_lab5_groupe.databinding.DataEntryFragmentBinding;
 import com.example.fit5046_lab5_groupe.entity.Order;
@@ -54,12 +56,15 @@ public class DataEntryFragment extends Fragment {
     private RadioButton radioButton;
     private EditText name;
     private EditText phone;
-    private  Button button;
+    private Button button;
+    private Button buttonCheck;
+    private Button clearButton;
+    private Order order;
 
     private int hour, minute;
     private int numRats;
 
-    private String orderDate, orderTime, numRat, ratType, oName, oPhone, orderInfo;
+    private String orderDate, orderTime, numRat, ratType, oName, oPhone, orderInfo, allOrders;
 
     private OrderViewModel orderViewModel;
 
@@ -80,16 +85,17 @@ public class DataEntryFragment extends Fragment {
         orderViewModel.getAllCustomers().observe(getViewLifecycleOwner(), new Observer<List<Order>>() {
             @Override
             public void onChanged(List<Order> orders) {
-                String allOrders = "";
+                //String allOrders = "";
                 int count = 1;
                 for(Order temp: orders){
                     String orderDetails = (count + " " + temp.orderDate+" "+temp.orderTime+" "
                             +temp.numRat + " " + temp.ratType + " " + temp.customerName + " " +
                             temp.customerPhone);
-                    allOrders = allOrders + System.getProperty("line.separator") + orderDetails;
+                    allOrders = orderDetails;
                     count += 1;
                 }
-                dataBinding.textViewInsert.setText(allOrders);
+                //dataBinding.textViewInsert.setText(allOrders);
+
             }
         });
 
@@ -186,7 +192,7 @@ public class DataEntryFragment extends Fragment {
                     oName = name.getText().toString();
                     oPhone = phone.getText().toString();
 
-                    Order order = new Order(orderDate, orderTime, numRat, ratType, oName, oPhone);
+                    order = new Order(orderDate, orderTime, numRat, ratType, oName, oPhone);
 
                     orderViewModel.insert(order);
 
@@ -194,12 +200,33 @@ public class DataEntryFragment extends Fragment {
                     orderInfo = orderDate + "," + orderTime + "," + numRat + ","
                             + ratType + "," + oName +
                             "," + oPhone;
+
+                    dataBinding.textViewInsert.setText("Order successful!");
                     //dataBinding.editTextTextPersonName.setText(orderInfo);
                 }
 
 
             }
         });
+
+        buttonCheck = dataBinding.checkButton;
+        buttonCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataBinding.textViewInsert.setText(allOrders);
+            }
+        });
+
+        clearButton = dataBinding.clearButton;
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                orderViewModel.deleteAll();
+                allOrders = "No order";
+                dataBinding.textViewInsert.setText("Your order was deleted!");
+            }
+        });
+
 
         return view;
 
@@ -286,10 +313,13 @@ public class DataEntryFragment extends Fragment {
         month = month + 1;
         int year = calendar.get(Calendar.YEAR);
 
+        calendar.set(2022, 1, 1);
+
         return generateDate(day, month, year);
     }
 
     public void showDatePicker(View view) {
+
         datePickerDialog.show();
     }
 

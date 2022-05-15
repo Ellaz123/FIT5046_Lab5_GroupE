@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="Select Date:"
         android:textColor="@color/black"
-        android:textSize="30sp"
+        android:textSize="20sp"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="0dp" />
@@ -25,7 +25,7 @@
         android:onClick="openDatePicker"
         android:text="JAN 01 2022"
         android:textColor="@color/purple_200"
-        android:textSize="20dp"
+        android:textSize="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintLeft_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:text="Select Time:"
         android:textColor="@color/black"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@+id/dateBtn"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
@@ -49,7 +49,7 @@
         android:layout_height="42dp"
         style="?android:spinnerStyle"
         android:text="09:16"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:textColor="@color/purple_200"
         android:backgroundTint="@color/white"
         android:onClick="openTimePicker"
@@ -63,13 +63,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:layout_marginTop="156dp"
+        android:layout_marginTop="4dp"
         android:text="Please select of number of RATs:"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@+id/TimeBtn"
-        tools:layout_editor_absoluteX="0dp"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
 
     <SeekBar
         android:id="@+id/slider"
@@ -106,7 +106,7 @@
             android:id="@+id/radioOne"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="0dp"
             android:text="Nasal swabs"
             tools:layout_editor_absoluteX="0dp"
             tools:ignore="MissingConstraints" />
@@ -172,18 +172,42 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:text="Save"
         app:layout_constraintTop_toBottomOf="@+id/editTextPhone"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp" />
+        tools:layout_editor_absoluteX="-2dp" />
+
     <TextView
         android:id="@+id/textViewInsert"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:textSize="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/clearButton"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/checkButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:text="Check Order"
         app:layout_constraintTop_toBottomOf="@+id/button2"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="609dp" />
+    <Button
+        android:id="@+id/clearButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:text="Clear Order"
+        app:layout_constraintTop_toBottomOf="@+id/checkButton"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="609dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
