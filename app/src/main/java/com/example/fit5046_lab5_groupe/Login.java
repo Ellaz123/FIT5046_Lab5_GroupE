@@ -68,16 +68,21 @@ public class Login extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         EditText emailEditText = binding.emailAddressText;
         EditText passwordEditText = binding.passwordText;
+
+        //Go to the sign up page
         binding.signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(Login.this, SignUp.class));
             }
         });
+
+        //Login with email and password
         binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
+                    //Validate the input
                     String txt_Email = emailEditText.getText().toString();
                     String txt_Pwd = passwordEditText.getText().toString();
                     loginUser(txt_Email, txt_Pwd);
@@ -86,6 +91,8 @@ public class Login extends AppCompatActivity {
                 }
             }
         });
+
+        //Go to the reset password page
         binding.restPasswordBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,24 +101,7 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    /**
-     * Old version of login
-     *
-    private void loginUser(String txt_email, String txt_pwd)  {
-        // call the object and provide it with email id and password
-        Task task = auth.signInWithEmailAndPassword(txt_email, txt_pwd);
-        task.addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                String msg = "Login Successful";
-                toastMsg(msg);
-                startActivity(new Intent(Login.this,
-                        MainActivity.class));
-            }
-        });
-    }
-     */
-
+    //Login with email and password
     private void loginUser(String txt_email, String txt_pwd) {
         auth.signInWithEmailAndPassword(txt_email, txt_pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override

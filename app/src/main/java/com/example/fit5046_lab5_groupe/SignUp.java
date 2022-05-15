@@ -49,6 +49,7 @@ public class SignUp extends AppCompatActivity {
                 String password_txt = passwordEditText.getText().toString();
                 String confirmPwd_txt = confirmPasswordEditText.getText().toString();
                 String address_txt = binding.editTextTextPostalAddress.getText().toString();
+                //Input validation
                 if (TextUtils.isEmpty(email_txt) ||
                         TextUtils.isEmpty(password_txt)) {
                     String msg = "Empty Username or Password";
@@ -74,8 +75,10 @@ public class SignUp extends AppCompatActivity {
             }
         });
     }
-    private void registerUser(String email_txt, String password_txt, String address_txt) {
 
+    //Register user on firebase authentication, and save the info in database
+    //Then jump to login page
+    private void registerUser(String email_txt, String password_txt, String address_txt) {
         auth.createUserWithEmailAndPassword(email_txt,password_txt).addOnCompleteListener(
                 new OnCompleteListener<AuthResult>() {
             @Override
@@ -93,11 +96,12 @@ public class SignUp extends AppCompatActivity {
         });
     }
 
+    // Write user information to database
     public void writeNewUser(String email, String address) {
         email = email.replace(".", "");
-        //FirebaseDatabase database = FirebaseDatabase.getInstance("https://test-487f4-default-rtdb.asia-southeast1.firebasedatabase.app");
-        //DatabaseReference mDatabase = database.getReference();
-        //mDatabase.child("users").child(email).child("address").setValue(address);
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://test-487f4-default-rtdb.asia-southeast1.firebasedatabase.app");
+        DatabaseReference mDatabase = database.getReference();
+        mDatabase.child("users").child(email).child("address").setValue(address);
         userViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(UserViewModel.class);
         User user = new User(email, address);
         userViewModel.insert(user);

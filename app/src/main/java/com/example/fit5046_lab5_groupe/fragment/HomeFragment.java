@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment {
 
 
         retrofitInterface = RetrofitClient.getRetrofitService();
-        homeBinding.btnSearch.setOnClickListener(new View.OnClickListener() {
+        homeBinding.searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 keyword=homeBinding.editText.getText().toString();
@@ -71,7 +71,7 @@ public class HomeFragment extends Fragment {
                             }
                             else {
                                 String result = list.get(0).getSnippet();
-                                homeBinding.tvResult.setText(result);
+                                homeBinding.resultTextView.setText(result);
                             }
                         }
                         else {

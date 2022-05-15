@@ -16,9 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.fit5046_lab5_groupe.UploadWorker;
 import com.example.fit5046_lab5_groupe.dao.UserDAO;
-import com.example.fit5046_lab5_groupe.database.Database;
 import com.example.fit5046_lab5_groupe.databinding.MapFragmentBinding;
-import com.example.fit5046_lab5_groupe.entity.User;
 import com.example.fit5046_lab5_groupe.viewmodel.UserViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -59,7 +57,6 @@ public class MapFragment extends Fragment {
     private MapView mapView;
     private MapFragmentBinding mapBinding;
     private UserViewModel userViewModel;
-    private UserDAO userDAO;
 
 
     public MapFragment() {
@@ -70,6 +67,10 @@ public class MapFragment extends Fragment {
                              Bundle savedInstanceState) {
         mapBinding = MapFragmentBinding.inflate(inflater, container, false);
         View view = mapBinding.getRoot();
+
+
+        //Get current user email and search user address from room database
+        //Move camera to address location and place a marker
 
         String email = this.getActivity().getIntent().getStringExtra("CurrentUserEmail");
         email = email.replace(".", "");
@@ -100,13 +101,15 @@ public class MapFragment extends Fragment {
         });
 
 
-        /**
+        //Get current user email and search user address from firebase database
+        //Move camera to address location and place a marker
+
         FirebaseDatabase database = FirebaseDatabase.
                 getInstance("https://test-487f4-default-rtdb.asia-southeast1.firebasedatabase.app");
         DatabaseReference mDatabase = database.getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String email = user.getEmail().replace(".","");
-        mDatabase.child("users").child(email).child("address").get().
+        String firebaseEmail = user.getEmail().replace(".","");
+        mDatabase.child("users").child(firebaseEmail).child("address").get().
                 addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -131,12 +134,12 @@ public class MapFragment extends Fragment {
                 }
             }
         });
-        **/
 
 
         return view;
     }
 
+    //Add point annotation on the map, and place a marker on the point.
     private void addAnnotationToMap(String address) {
         mapView = mapBinding.mapView;
         Bitmap bitmap = bitmapFromDrawableRes(MapFragment.this.getActivity(), R.drawable.red_marker);
@@ -151,11 +154,11 @@ public class MapFragment extends Fragment {
         pointAnnotationManager.create(pointAnnotationOptions);
     }
 
-
     private Bitmap bitmapFromDrawableRes(Context context, @DrawableRes int resourceId) {
         return convertDrawableToBitmap(AppCompatResources.getDrawable(context, resourceId));
     }
 
+    // Convert drawable to Bitmap
     private Bitmap convertDrawableToBitmap(Drawable sourceDrawable) {
         if (sourceDrawable == null) {
             return null;
@@ -180,6 +183,7 @@ public class MapFragment extends Fragment {
         }
     }
 
+    // Using Geocoder to get the lat and lng from address
     public LatLng getLocationFromAddress(Context context, String strAddress) {
         Geocoder geocoder = new Geocoder(context);
         List<Address> addressList;

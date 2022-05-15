@@ -30,7 +30,7 @@
         app:layout_constraintVertical_bias="0.087" />
 
     <Button
-        android:id="@+id/btnSearch"
+        android:id="@+id/searchBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Search"
@@ -42,7 +42,7 @@
         app:layout_constraintVertical_bias="0.222" />
 
     <TextView
-        android:id="@+id/tvResult"
+        android:id="@+id/resultTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,7 +53,7 @@
         app:layout_constraintVertical_bias="0.375" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/imageView"
         android:layout_width="206dp"
         android:layout_height="65dp"
         app:srcCompat="@drawable/ic_logo"

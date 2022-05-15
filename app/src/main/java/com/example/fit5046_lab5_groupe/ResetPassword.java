@@ -24,6 +24,7 @@ public class ResetPassword extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        //Send an email to reset password
         binding.SendEmailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
