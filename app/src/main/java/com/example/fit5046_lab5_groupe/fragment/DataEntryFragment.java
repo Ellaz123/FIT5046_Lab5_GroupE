@@ -11,8 +11,13 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -203,6 +208,8 @@ public class DataEntryFragment extends Fragment {
 
                     dataBinding.textViewInsert.setText("Order successful!");
                     //dataBinding.editTextTextPersonName.setText(orderInfo);
+
+                    addEventToLocalCalendar(orderDate, orderTime, numRat, ratType);
                 }
 
 
@@ -229,6 +236,56 @@ public class DataEntryFragment extends Fragment {
 
 
         return view;
+
+    }
+
+    private void addEventToLocalCalendar(String orderDate, String orderTime, String numRat, String ratType) {
+        String[] EVENT_PROJECTION = new String[] {
+                CalendarContract.Calendars._ID,                           // 0
+                CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
+                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,         // 2
+                CalendarContract.Calendars.OWNER_ACCOUNT                  // 3
+        };
+
+        int PROJECTION_ID_INDEX = 0;
+        int PROJECTION_ACCOUNT_NAME_INDEX = 1;
+        int PROJECTION_DISPLAY_NAME_INDEX = 2;
+        int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
+        Intent intent = new Intent(Intent.ACTION_INSERT);
+        intent.setData(CalendarContract.CONTENT_URI);
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null){
+            Cursor cur = null;
+            ContentResolver cr = getActivity().getContentResolver();
+            Uri uri = CalendarContract.Calendars.CONTENT_URI;
+            String selection = "((" + CalendarContract.Calendars.ACCOUNT_NAME + " = ?) AND ("
+                    + CalendarContract.Calendars.ACCOUNT_TYPE + " = ?) AND ("
+                    + CalendarContract.Calendars.OWNER_ACCOUNT + " = ?))";
+            String[] selectionArgs = new String[] {"test@example.com", "com.google",
+                    "test@example.com"};
+            cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
+            long calID = cur.getLong(PROJECTION_ID_INDEX);
+            ContentResolver contentResolver = getActivity().getContentResolver();
+            ContentValues values = new ContentValues();
+            Uri u = contentResolver.insert(CalendarContract.Events.CONTENT_URI, values);
+            long eventID = Long.parseLong(u.getLastPathSegment());
+
+            String dateTime = new StringBuilder(orderDate) + " " + orderTime;
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Date startDate = null;
+            try {
+                startDate = simpleDateFormat.parse(dateTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            intent.putExtra(CalendarContract.Events.TITLE, "Booking Your Rats");
+            intent.putExtra(CalendarContract.Events.ALL_DAY, false);
+            intent.putExtra(CalendarContract.Events.DESCRIPTION, new StringBuilder(numRat) + ratType);
+            intent.putExtra(CalendarContract.Events.DTSTART, startDate);
+            startActivity(intent);
+        }else {
+            Toast.makeText(getActivity(), "There is no google calender installed", Toast.LENGTH_SHORT).show();
+        }
+
 
     }
 
