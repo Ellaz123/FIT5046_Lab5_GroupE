@@ -68,8 +68,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.google.code.gson:gson:2.8.8'
 
-    //anyChart
-    implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
+    //Chart
+    implementation 'com.openxu.viewlib:OXViewLib:1.0.2'
+
     // covid api
     implementation('com.squareup.okhttp3:okhttp:4.2.0')
 
@@ -101,6 +102,7 @@ dependencies {
     annotationProcessor 'androidx.room:room-compiler:2.4.1'
 
     implementation "androidx.work:work-runtime:2.7.1"
+    //
 
 
 }

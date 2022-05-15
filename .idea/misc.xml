@@ -31,11 +31,18 @@
         <entry key="app/src/main/res/layout/content_main.xml" value="0.11666666666666667" />
         <entry key="app/src/main/res/layout/data_entry_fragment.xml" value="0.23731884057971014" />
         <entry key="app/src/main/res/layout/history_fragment.xml" value="0.11666666666666667" />
-        <entry key="app/src/main/res/layout/home_fragment.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/home_fragment.xml" value="0.32409972299168976" />
         <entry key="app/src/main/res/layout/layout_bottom_dialog.xml" value="0.11666666666666667" />
-        <entry key="app/src/main/res/layout/report_fragment.xml" value="0.12962962962962962" />
+        <entry key="app/src/main/res/layout/report_fragment.xml" value="0.335" />
       </map>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK" />
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.12962962962962962" />
+      </ProjectState>
+    </option>
+  </component>
 </project>

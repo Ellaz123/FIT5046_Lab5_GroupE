@@ -71,20 +71,35 @@
 
     </LinearLayout>
 
-    <com.anychart.AnyChartView
-        android:id="@+id/any_chart_view"
+    <com.openxu.cview.chart.barchart.BarVerticalChart
+        android:id="@+id/chart4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="7dp"
         android:layout_below="@id/linearLayout"
-        android:visibility="invisible" >
+        android:background="#ffffff"
+        android:padding="10dp"
+        android:visibility="gone"/>
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="247dp"
-            android:layout_height="152dp" />
-    </com.anychart.AnyChartView>
-
-
-
-
+    <!--饼状图4-->
+    <com.openxu.cview.chart.piechart.PieChartLayout
+        android:id="@+id/pieChart4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="7dp"
+        android:layout_below="@id/linearLayout"
+        android:layout_centerVertical="true"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:visibility="gone">
+        <com.openxu.cview.chart.piechart.PieChart
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:layout_weight="1" />
+        <com.openxu.cview.chart.piechart.PieChartLableView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3" />
+    </com.openxu.cview.chart.piechart.PieChartLayout>
 </RelativeLayout>

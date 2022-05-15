@@ -1,8 +1,7 @@
 package com.example.fit5046_lab5_groupe.fragment;
 //package xyz.ecoo.www.imagecarouseldemo;
 
-import androidx.fragment.app.Fragment;
-//import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,47 +9,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.anychart.chart.common.dataentry.ValueDataEntry;
-import com.anychart.chart.common.listener.Event;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
-import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.example.fit5046_lab5_groupe.BottomDialog;
 import com.example.fit5046_lab5_groupe.OkHttpUtil;
-import com.example.fit5046_lab5_groupe.R;
 import com.example.fit5046_lab5_groupe.ReportBean;
 import com.example.fit5046_lab5_groupe.databinding.ReportFragmentBinding;
+import com.example.fit5046_lab5_groupe.entity.PieBean;
+import com.google.firebase.database.annotations.NotNull;
+import com.google.gson.Gson;
+import com.openxu.cview.chart.bean.BarBean;
+import com.openxu.cview.chart.piechart.PieChartLayout;
+import com.openxu.utils.DensityUtil;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
-import android.widget.TimePicker;
-import android.widget.Toast;
-
-import com.anychart.AnyChart;
-import com.anychart.AnyChartView;
-import com.anychart.chart.common.dataentry.DataEntry;
-import com.anychart.chart.common.listener.ListenersInterface;
-import com.anychart.charts.Pie;
-import com.anychart.enums.Align;
-import com.anychart.charts.Cartesian;
-import com.anychart.core.cartesian.series.Column;
-import com.anychart.enums.Anchor;
-import com.anychart.enums.HoverMode;
-import com.anychart.enums.Position;
-import com.anychart.enums.TooltipPositionMode;
-
-
-import com.anychart.enums.LegendLayout;
-import com.google.firebase.database.annotations.NotNull;
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.fragment.app.Fragment;
 
 //import com.example.fit5046_lab5_groupe.viewmodel.SharedViewModel;
 public class ReportFragment extends Fragment {
@@ -59,17 +39,21 @@ public class ReportFragment extends Fragment {
     private TextView btnover;
     private Calendar cal;
     private int year, month, day;
-    List<DataEntry> data;
-    private Pie pie;
-    private Column column;
-
+    ReportBean reportBean;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = ReportFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();;
         //SharedViewModel model = new ViewModelProvider(getActivity()).get(SharedViewModel.class);
+        fetchData();
 
+        binding.chart4.setLoading(true);
+        binding.chart4.setBarItemSpace(DensityUtil.dip2px(requireContext(), 40));  //柱间距
+        binding.chart4.setBarColor(new int[]{Color.parseColor("#5F93E7")});
 
+        binding.pieChart4.setLoading(true);
+        binding.pieChart4.setRingWidth(DensityUtil.dip2px(requireContext(), 0));
+        binding.pieChart4.setTagModul(PieChartLayout.TAG_MODUL.MODUL_CHART);
         //get start date   2022-05-13
         getbeginDate();
         btnbegin = binding.btnbegin;
@@ -95,20 +79,19 @@ public class ReportFragment extends Fragment {
         binding.btnselect.setOnClickListener(view1 -> {
 
             BottomDialog bottomDialog = new BottomDialog(requireContext());
-            fetchData();
             bottomDialog.setListener(new BottomDialog.BottomDialogListener() {
                 @Override
                 public void onPieChart() {
-                    //pie chart
-                    binding.anyChartView.setVisibility(View.VISIBLE);
-                    initPic();
+                    binding.chart4.setVisibility(View.GONE);
+                    binding.pieChart4.setVisibility(View.VISIBLE);
+                    initPie();
                 }
 
                 @Override
                 public void onColumnChart() {
-                    // column chart
-                    binding.anyChartView.setVisibility(View.VISIBLE);
-                    initColumnc();
+                    binding.chart4.setVisibility(View.VISIBLE);
+                    binding.pieChart4.setVisibility(View.GONE);
+                    initNewColumnc();
                 }
             });
             bottomDialog.show();
@@ -117,72 +100,6 @@ public class ReportFragment extends Fragment {
         return view;
 
     }
-
-    private void initPic() {
-        binding.anyChartView.setProgressBar(binding.progressBar);
-        pie = AnyChart.pie();
-        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
-            @Override
-            public void onClick(Event event) {
-                Toast.makeText(ReportFragment.this.getActivity(), event.getData().get("x") + ":" + event.getData().get("value"), Toast.LENGTH_SHORT).show();
-            }
-        });
-        pie.data(data);
-
-        pie.title("Coronavirus (COVID-19) in the UK");
-
-        pie.labels().position("Date");
-
-        pie.legend().title().enabled(true);
-        pie.legend().title()
-                .text("New daily Cases")
-                .padding(0d, 0d, 10d, 0d);
-
-        pie.legend()
-                .position("center-bottom")
-                .itemsLayout(LegendLayout.HORIZONTAL)
-                .align(Align.CENTER);
-        binding.anyChartView.setChart(pie);
-    }
-
-    private void initColumnc() {
-
-        binding.anyChartView.setProgressBar(binding.progressBar);
-        Cartesian cartesian = AnyChart.column();
-        Column column = cartesian.column(data);
-
-        column.tooltip()
-                .titleFormat("{%X}")
-                .position(Position.CENTER_BOTTOM)
-                .anchor(Anchor.CENTER_BOTTOM)
-                .offsetX(0d)
-                .offsetY(5d)
-                .format("${%Value}{groupsSeparator: }");
-
-        cartesian.animation(true);
-        cartesian.title("Coronavirus (COVID-19) in the UK");
-
-        cartesian.yScale().minimum(0d);
-
-        cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
-
-        cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
-        cartesian.interactivity().hoverMode(HoverMode.BY_X);
-
-        cartesian.xAxis(0).title("Date");
-        cartesian.yAxis(0).title("New daily Cases");
-
-        binding.anyChartView.setChart(cartesian);
-    }
-
-
-//    List<DataEntry> data = new ArrayList<>();
-//        data.add(new ValueDataEntry("Apples", 6371664));
-//        data.add(new ValueDataEntry("Pears", 789622));
-//        data.add(new ValueDataEntry("Bananas", 7216301));
-////        data.add(new ValueDataEntry("Grapes", 1486621));
-//        data.add(new ValueDataEntry("Oranges", 1200000));
-
 
     private void fetchData() {
         OkHttpUtil.getInstance().Get("https://api.coronavirus.data.gov.uk/v1/data", new okhttp3.Callback() {
@@ -195,23 +112,7 @@ public class ReportFragment extends Fragment {
             @Override
             public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response) throws IOException {
                 String body = response.body().string();
-                ReportBean reportBean = new Gson().fromJson(body, ReportBean.class);
-
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                try {
-                    long begin = formatter.parse(btnbegin.getText().toString()).getTime();
-                    long over = formatter.parse(btnover.getText().toString()).getTime();
-                    data = new ArrayList<>();
-                    for (int i = 0; i < reportBean.getLength(); i++){
-                        long report = formatter.parse(reportBean.getData().get(i).getDate()).getTime();
-                        if (begin <= report && over >= report){
-                            data.add(new ValueDataEntry(reportBean.getData().get(i).getDate(), (Number) reportBean.getData().get(i).getLatestBy()));
-                        }
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
+                reportBean = new Gson().fromJson(body, ReportBean.class);
             }
         });
     }
@@ -232,5 +133,52 @@ public class ReportFragment extends Fragment {
         day = cal.get(Calendar.DAY_OF_MONTH);
     }
 
+    private void initPie(){
+        if(reportBean == null) return;
+        List<PieBean> datalist = new ArrayList<>();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            long begin = formatter.parse(btnbegin.getText().toString()).getTime();
+            long over = formatter.parse(btnover.getText().toString()).getTime();
+            for (int i = 0; i < reportBean.getLength(); i++){
+                long report = formatter.parse(reportBean.getData().get(i).getDate()).getTime();
+                if (begin <= report && over >= report){
+                    datalist.add(new PieBean(reportBean.getData().get(i).getLatestBy() == null ? 0 : ((Number) reportBean.getData().get(i).getLatestBy()).floatValue()
+                            , reportBean.getData().get(i).getDate()));
 
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        binding.pieChart4.setLoading(false);
+        binding.pieChart4.setChartData(PieBean.class, "Number", "Name",datalist ,null);
+    }
+
+    private void initNewColumnc(){
+        if(reportBean == null) return;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        //X轴
+        List<String> strXList = new ArrayList<>();
+        //bar char data
+        List<List<BarBean>> dataList = new ArrayList<>();
+        try {
+            long begin = formatter.parse(btnbegin.getText().toString()).getTime();
+            long over = formatter.parse(btnover.getText().toString()).getTime();
+            for (int i = 0; i < reportBean.getLength(); i++){
+                long report = formatter.parse(reportBean.getData().get(i).getDate()).getTime();
+                if (begin <= report && over >= report){
+
+                    List<BarBean> list = new ArrayList<>();
+                    list.add(new BarBean(reportBean.getData().get(i).getLatestBy() == null ? 0 : ((Number) reportBean.getData().get(i).getLatestBy()).floatValue(), "Number of confirmed cases"));
+                    dataList.add(list);
+                    strXList.add(reportBean.getData().get(i).getDate());
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        binding.chart4.setLoading(false);
+        binding.chart4.setData(dataList, strXList);
+    }
 }
