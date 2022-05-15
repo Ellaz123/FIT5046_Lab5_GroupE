@@ -17,6 +17,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
     buildTypes {
         release {
             minifyEnabled false
@@ -82,6 +83,7 @@ dependencies {
         exclude group: 'group_name', module: 'module_name'
 
     }
+
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     //date picker

@@ -129,13 +129,13 @@ public class ReportFragment extends Fragment {
         });
         pie.data(data);
 
-        pie.title("Fruits imported in 2015 (in kg)");
+        pie.title("Coronavirus (COVID-19) in the UK");
 
-        pie.labels().position("outside");
+        pie.labels().position("Date");
 
         pie.legend().title().enabled(true);
         pie.legend().title()
-                .text("Retail channels")
+                .text("New daily Cases")
                 .padding(0d, 0d, 10d, 0d);
 
         pie.legend()
@@ -164,13 +164,13 @@ public class ReportFragment extends Fragment {
 
         cartesian.yScale().minimum(0d);
 
-        cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+        cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
         cartesian.interactivity().hoverMode(HoverMode.BY_X);
 
-        cartesian.xAxis(0).title("Product");
-        cartesian.yAxis(0).title("Revenue");
+        cartesian.xAxis(0).title("Date");
+        cartesian.yAxis(0).title("New daily Cases");
 
         binding.anyChartView.setChart(cartesian);
     }
