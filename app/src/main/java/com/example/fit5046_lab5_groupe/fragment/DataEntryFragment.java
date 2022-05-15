@@ -277,7 +277,7 @@ public class DataEntryFragment extends Fragment {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            intent.putExtra(CalendarContract.Events.TITLE, "Booking Your Rats");
+            intent.putExtra(CalendarContract.Events.TITLE, new StringBuilder(numRat) + ratType + "Booking Your Rats");
             intent.putExtra(CalendarContract.Events.ALL_DAY, false);
             intent.putExtra(CalendarContract.Events.DESCRIPTION, new StringBuilder(numRat) + ratType);
             intent.putExtra(CalendarContract.Events.DTSTART, startDate);

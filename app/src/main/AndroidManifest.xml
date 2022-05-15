@@ -30,7 +30,7 @@
             android:exported="false"
             android:theme="@style/Theme.FIT5046_Lab5_GroupE.NoActionBar" />
         <activity
-            android:name=".Login"
+            android:name=".Calender"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
