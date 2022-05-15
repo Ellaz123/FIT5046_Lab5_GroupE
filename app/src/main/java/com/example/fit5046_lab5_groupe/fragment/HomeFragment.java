@@ -16,9 +16,7 @@ import com.example.fit5046_lab5_groupe.Login;
 import com.example.fit5046_lab5_groupe.RetrofitClient;
 import com.example.fit5046_lab5_groupe.RetrofitInterface;
 import com.example.fit5046_lab5_groupe.SearchResponse;
-import com.example.fit5046_lab5_groupe.SignUp;
 import com.example.fit5046_lab5_groupe.databinding.HomeFragmentBinding;
-import com.example.fit5046_lab5_groupe.databinding.MapFragmentBinding;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -30,8 +28,8 @@ import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
     private HomeFragmentBinding homeBinding;
-    private static final String API_KEY = "AIzaSyDwQTLnJr1spGiAiYXoDJql__NZVIBhqzM";
-    private static final String SEARCH_ID_cx = "46bf2bc0f4661d3b4";
+    private static final String API_KEY = "AIzaSyCa_mz8x6hlWTvsWSzGRF9s9-HGVszpwX0";
+    private static final String SEARCH_ID_cx = "d3126328946095b61";
     private String keyword;
     private RetrofitInterface retrofitInterface;
 
@@ -61,16 +59,20 @@ public class HomeFragment extends Fragment {
                 keyword=homeBinding.editText.getText().toString();
                 Call<SearchResponse> callAsync =
                         retrofitInterface.customSearch(API_KEY,SEARCH_ID_cx, keyword);
-                //makes an async request & invokes callback methods when the response returns
                 callAsync.enqueue(new Callback<SearchResponse>() {
                     @Override
                     public void onResponse(Call<SearchResponse> call,
                                            Response<SearchResponse> response) {
                         if (response.isSuccessful()) {
                             List<Items> list = response.body().items;
-//getting snippet from the object in the position 0
-                            String result= list.get(0).getSnippet();
-                            homeBinding.tvResult.setText(result);
+                            if (list == null) {
+                                Toast.makeText(getActivity(), "Nothing found in search engine",
+                                        Toast.LENGTH_SHORT);
+                            }
+                            else {
+                                String result = list.get(0).getSnippet();
+                                homeBinding.tvResult.setText(result);
+                            }
                         }
                         else {
                             Log.i("Error ","Response failed");
