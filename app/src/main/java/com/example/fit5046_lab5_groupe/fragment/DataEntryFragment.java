@@ -321,6 +321,7 @@ public class DataEntryFragment extends Fragment {
 
         datePickerDialog.show();
     }
+    //
 
     public void showTimePicker(View view) {
         timePickerDialog.show();
