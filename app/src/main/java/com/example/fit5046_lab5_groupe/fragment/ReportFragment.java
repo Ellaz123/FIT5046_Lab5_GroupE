@@ -48,9 +48,8 @@ public class ReportFragment extends Fragment {
         fetchData();
 
         binding.chart4.setLoading(true);
-        binding.chart4.setBarItemSpace(DensityUtil.dip2px(requireContext(), 40));  //柱间距
+        binding.chart4.setBarItemSpace(DensityUtil.dip2px(requireContext(), 40));
         binding.chart4.setBarColor(new int[]{Color.parseColor("#5F93E7")});
-
         binding.pieChart4.setLoading(true);
         binding.pieChart4.setRingWidth(DensityUtil.dip2px(requireContext(), 0));
         binding.pieChart4.setTagModul(PieChartLayout.TAG_MODUL.MODUL_CHART);
@@ -152,15 +151,13 @@ public class ReportFragment extends Fragment {
             e.printStackTrace();
         }
         binding.pieChart4.setLoading(false);
-        binding.pieChart4.setChartData(PieBean.class, "Number", "Name",datalist ,null);
+        binding.pieChart4.setChartData(PieBean.class, "Numner", "Name",datalist ,null);
     }
 
     private void initNewColumnc(){
         if(reportBean == null) return;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        //X轴
         List<String> strXList = new ArrayList<>();
-        //bar char data
         List<List<BarBean>> dataList = new ArrayList<>();
         try {
             long begin = formatter.parse(btnbegin.getText().toString()).getTime();
@@ -168,7 +165,6 @@ public class ReportFragment extends Fragment {
             for (int i = 0; i < reportBean.getLength(); i++){
                 long report = formatter.parse(reportBean.getData().get(i).getDate()).getTime();
                 if (begin <= report && over >= report){
-
                     List<BarBean> list = new ArrayList<>();
                     list.add(new BarBean(reportBean.getData().get(i).getLatestBy() == null ? 0 : ((Number) reportBean.getData().get(i).getLatestBy()).floatValue(), "Number of confirmed cases"));
                     dataList.add(list);
