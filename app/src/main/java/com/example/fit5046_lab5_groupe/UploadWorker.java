@@ -9,6 +9,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 import androidx.work.Data;
@@ -18,15 +19,13 @@ import androidx.work.WorkerParameters;
 import com.example.fit5046_lab5_groupe.database.Database;
 import com.example.fit5046_lab5_groupe.entity.User;
 import com.example.fit5046_lab5_groupe.viewmodel.UserViewModel;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
+
 
 public class UploadWorker extends Worker {
 
@@ -45,7 +44,7 @@ public class UploadWorker extends Worker {
         Database db = Database.getInstance(applicationContext);
         Log.i("Info", "TimeStamp:" + time + "\nupLoadWorker called");
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                List<User> users = db.userDao().getAll().getValue();
+                List<User> users = db.userDao().getAllInList();
                 if (users == null){
                     Log.e("Error", "No user in database");
                 }
